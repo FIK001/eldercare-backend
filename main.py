@@ -5,6 +5,10 @@ from typing import List
 from models import DailyCheckin, Alert
 from models import User, Caregiver, Reminder, DailyCheckin, Alert
 from fastapi.middleware.cors import CORSMiddleware
+from twilio_service import send_real_sms, make_real_call
+import re
+import random
+
 
 app = FastAPI()
 
