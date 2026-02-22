@@ -5,7 +5,6 @@ from typing import List
 from models import DailyCheckin, Alert
 from models import User, Caregiver, Reminder, DailyCheckin, Alert
 
-
 app = FastAPI()
 
 
@@ -126,14 +125,17 @@ def trigger_fall(user_id: int, session: Session = Depends(get_session)):
     session.commit()
     session.refresh(alert)
     
-    #Send mock SMS to caregiver
     caregiver = session.get(Caregiver, user.caregiver_id)
     if caregiver:
-        send_mock_sms(
-            caregiver.phone,
-            f"ALERT: {user.name} has fallen. Immediate attention required."
-        )
+        send_real_sms(
+        caregiver.phone,
+        f"ALERT: {user.name} has fallen. Immediate attention required."
+    )
 
+    make_real_call(
+        caregiver.phone,
+        f"Emergency alert. {user.name} has fallen and needs immediate assistance."
+    )
     return {
         "message": "Fall alert created.",
         "alert": alert
